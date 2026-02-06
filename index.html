@@ -1,206 +1,932 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cascadia Health Network — Better Care. Connected.</title>
-  <meta name="description" content="Pretend customer site for Bootcamp discovery exercises. Healthcare Network – Hybrid Migration scenario." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Cisco Diabetes Network - Pump + CGM Matchmaker (Just for Fun)</title>
+  <meta name="description" content="A fun, non-medical way to explore Continuous Glucose Monitor (CGM) and insulin pump combinations. Not medical advice." />
+
   <style>
     :root{
-      --bg:#0f172a;          /* slate-900 */
-      --card:#111827;        /* gray-900 */
-      --muted:#94a3b8;       /* slate-400 */
-      --text:#e5e7eb;        /* gray-200 */
-      --accent:#22c55e;      /* green-500 */
-      --accent-2:#60a5fa;    /* blue-400 */
-      --chip:#1f2937;        /* gray-800 */
-      --border:#1f2937;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 16px;
+      /* Brand-inspired colors pulled from the provided logos */
+      --dn-cyan: #00BCEB;
+      --dn-navy: #152E51;
+      --dn-navy-2:#1E4471;
+      --dn-gray: #6B7280;
+      --dn-bg: #F6FBFD;
+      --dn-card: #FFFFFF;
+      --dn-border: rgba(21,46,81,.14);
+      --dn-shadow: 0 10px 30px rgba(21,46,81,.10);
+      --dn-radius: 18px;
+      --dn-radius-sm: 12px;
+
+      --focus: 0 0 0 4px rgba(0,188,235,.25);
+      --text: #0B1220;
+      --muted: #425166;
+      --danger: #B42318;
+      --warning: #B54708;
+
+      --max: 1120px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1023 0%, #0f172a 60%, #0b1023 100%);color:var(--text);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";line-height:1.55}
-    a{color:var(--accent-2);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .container{max-width:1100px;margin:0 auto;padding:32px 20px}
-    header{position:sticky;top:0;background:rgba(15,23,42,.7);backdrop-filter: blur(10px);border-bottom:1px solid var(--border);z-index:20}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 210deg, #22c55e, #60a5fa, #22c55e);box-shadow:var(--shadow)}
-    .brand h1{font-size:18px;margin:0}
-    .nav a{padding:8px 10px;border-radius:10px}
-    .nav a:hover{background:var(--chip)}
-    .hero{padding:64px 0 28px}
-    .hero .title{font-size:42px;line-height:1.15;margin:0 0 10px}
-    .hero .subtitle{color:var(--muted);font-size:18px;margin:0 0 22px}
-    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-    .chip{background:var(--chip);border:1px solid var(--border);padding:8px 12px;border-radius:999px;color:var(--text);font-size:13px}
-    .grid{display:grid;gap:18px}
-    @media(min-width:860px){.grid-2{grid-template-columns:1fr 1fr}}
-    section{margin:26px 0;padding:22px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,#0f172a, #0d142c)}
-    h2{margin:0 0 12px;font-size:22px}
-    p{margin:10px 0}
-    ul{margin:10px 0 0 18px}
-    li{margin:6px 0}
-    .card{box-shadow:var(--shadow)}
-    .table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-    .table th,.table td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left}
-    .table th{color:#cbd5e1;background:#0b1227}
-    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#0b1227;border:1px solid var(--border);color:#cbd5e1;font-size:12px}
-    .muted{color:var(--muted)}
-    .footer{border-top:1px solid var(--border);margin-top:28px;padding-top:18px;color:var(--muted);font-size:14px}
-    .callout{border-left:4px solid var(--accent);background:#0b1227;padding:14px 16px;border-radius:8px;margin:12px 0;color:#d1fae5}
-    .cta{display:inline-block;margin-top:8px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent),#10b981);color:#0b1227;font-weight:700}
-    .kbd{padding:2px 8px;border:1px solid var(--border);border-bottom-width:3px;border-radius:8px;background:#0b1227}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(900px 420px at 18% -10%, rgba(0,188,235,.16), transparent 60%),
+        radial-gradient(900px 420px at 92% 0%, rgba(30,68,113,.12), transparent 55%),
+        linear-gradient(180deg, #fff, var(--dn-bg));
+      line-height:1.5;
+    }
+
+    a{color:var(--dn-navy); text-decoration-thickness:2px; text-underline-offset:3px}
+    a:hover{color:var(--dn-navy-2)}
+    .skip-link{
+      position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      left:16px; top:16px; width:auto; height:auto;
+      padding:10px 12px; background:#fff; border-radius:10px;
+      box-shadow: var(--dn-shadow); outline:none;
+      z-index:9999;
+    }
+
+    header{
+      padding:28px 16px 10px;
+    }
+    .wrap{max-width:var(--max); margin:0 auto}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+    }
+    .brand img{
+      width:56px; height:auto; display:block;
+    }
+    .brand-title{
+      display:flex; flex-direction:column;
+    }
+    .brand-title strong{
+      font-size:18px; letter-spacing:.2px;
+      color:var(--dn-navy);
+    }
+    .brand-title span{
+      color:var(--dn-gray);
+      font-weight:600;
+      margin-top:2px;
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--dn-border);
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+      backdrop-filter: blur(6px);
+    }
+    .pill .dot{
+      width:10px; height:10px; border-radius:50%;
+      background:var(--dn-cyan);
+      box-shadow:0 0 0 4px rgba(0,188,235,.12);
+    }
+    .pill b{color:var(--dn-navy)}
+
+    main{padding:0 16px 48px}
+
+    .hero{
+      margin:18px auto 18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:var(--dn-card);
+      border:1px solid var(--dn-border);
+      border-radius:var(--dn-radius);
+      box-shadow: var(--dn-shadow);
+    }
+
+    .hero-left{
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-left::after{
+      content:"";
+      position:absolute;
+      inset:-60px -40px auto auto;
+      width:280px; height:280px;
+      background: radial-gradient(circle at 30% 30%, rgba(0,188,235,.22), transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(30,68,113,.16), transparent 62%);
+      filter: blur(0px);
+      transform: rotate(12deg);
+      border-radius: 50%;
+      pointer-events:none;
+    }
+
+    h1{
+      margin:0 0 10px;
+      color:var(--dn-navy);
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height:1.12;
+      letter-spacing:-.3px;
+    }
+    .subtitle{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size: 16.5px;
+      max-width: 70ch;
+    }
+
+    .disclaimer{
+      display:flex; gap:12px;
+      border-radius: var(--dn-radius-sm);
+      border:1px solid rgba(180,35,24,.18);
+      background: rgba(180,35,24,.06);
+      padding:12px 12px;
+      margin:14px 0 0;
+    }
+    .disclaimer svg{flex:0 0 auto; margin-top:1px}
+    .disclaimer b{color:var(--danger)}
+    .disclaimer p{margin:0; color:#3A1A16; font-size: 14px}
+    .disclaimer small{display:block; color:#55302A; margin-top:6px; font-size: 12.5px}
+
+    .hero-right{
+      padding:18px;
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .hero-right .poster{
+      border-radius: var(--dn-radius);
+      overflow:hidden;
+      border:1px solid var(--dn-border);
+      background:#fff;
+    }
+    .hero-right img{
+      width:100%; height:auto; display:block;
+    }
+
+    .cta-row{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+    button, .btn{
+      font: inherit;
+      border-radius: 999px;
+      padding:11px 14px;
+      border:1px solid transparent;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      user-select:none;
+    }
+    .btn-primary{
+      background: var(--dn-navy);
+      color:#fff;
+      box-shadow: 0 10px 18px rgba(21,46,81,.22);
+    }
+    .btn-primary:hover{background: var(--dn-navy-2)}
+    .btn-secondary{
+      background: #fff;
+      border-color: var(--dn-border);
+      color: var(--dn-navy);
+    }
+    .btn-secondary:hover{border-color: rgba(0,188,235,.45); box-shadow: var(--focus)}
+    .btn-ghost{
+      background: transparent;
+      border-color: transparent;
+      color: var(--dn-navy);
+    }
+    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible{
+      outline:none;
+      box-shadow: var(--focus);
+      border-color: rgba(0,188,235,.6);
+    }
+    button[disabled]{
+      opacity:.55; cursor:not-allowed;
+    }
+
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .section-title{
+      display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+      margin:26px 0 10px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:-.2px;
+      color: var(--dn-navy);
+    }
+    .section-title .hint{
+      margin:0;
+      color: var(--dn-gray);
+      font-weight:600;
+      font-size: 13px;
+    }
+
+    .picker{
+      padding:16px;
+    }
+
+    .field{
+      display:flex; flex-direction:column; gap:8px;
+      margin:12px 0;
+    }
+    .field label{
+      font-weight: 800;
+      color: var(--dn-navy);
+    }
+    select{
+      padding:12px 12px;
+      border-radius: 12px;
+      border:1px solid var(--dn-border);
+      background:#fff;
+      font: inherit;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--dn-border);
+      background: rgba(0,188,235,.06);
+      color: var(--dn-navy);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .chip .mini{
+      width:8px; height:8px; border-radius:999px; background: var(--dn-cyan);
+    }
+
+    .result{
+      padding:16px;
+    }
+    .result h3{
+      margin:0 0 6px;
+      color: var(--dn-navy);
+      font-size: 18px;
+    }
+    .result p{margin:0; color: var(--muted)}
+    .score{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .meter{
+      height:10px; width:210px; border-radius:999px;
+      background: rgba(21,46,81,.10);
+      overflow:hidden;
+      border:1px solid var(--dn-border);
+    }
+    .meter > span{
+      display:block; height:100%;
+      width: 50%;
+      background: linear-gradient(90deg, var(--dn-cyan), rgba(0,188,235,.55));
+    }
+    .badge{
+      display:inline-flex; align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size: 13px;
+      border:1px solid var(--dn-border);
+      background:#fff;
+      color: var(--dn-navy);
+    }
+    .badge.good{background: rgba(0,188,235,.10)}
+    .badge.warn{background: rgba(181,71,8,.10); border-color: rgba(181,71,8,.18); color:#6B2A00}
+    .badge.neutral{background: rgba(21,46,81,.06)}
+    .list{
+      margin:12px 0 0; padding-left:18px;
+      color: var(--muted);
+    }
+
+    .compare{
+      padding:16px;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid var(--dn-border);
+      border-radius: 14px;
+      background:#fff;
+    }
+    th, td{
+      padding:12px 12px;
+      vertical-align:top;
+      border-bottom:1px solid rgba(21,46,81,.10);
+      text-align:left;
+      font-size: 14px;
+    }
+    th{
+      background: rgba(0,188,235,.08);
+      color: var(--dn-navy);
+      font-size: 13px;
+      letter-spacing:.25px;
+      text-transform: uppercase;
+    }
+    tr:last-child td{border-bottom:none}
+
+    footer{
+      padding:26px 16px 44px;
+      border-top: 1px solid rgba(21,46,81,.10);
+      background: rgba(255,255,255,.55);
+    }
+    .footer-grid{
+      max-width:var(--max);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap:16px;
+    }
+    @media (max-width: 900px){
+      .footer-grid{grid-template-columns:1fr}
+    }
+    .legal{
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .links{
+      display:flex; flex-direction:column; gap:10px;
+      align-items:flex-start;
+    }
+    .links .placeholder{
+      width:100%;
+      padding:12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(21,46,81,.22);
+      background: rgba(0,188,235,.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Cute, subtle “orbit” animation for vibes */
+    .orbit{
+      position:relative;
+      width:38px; height:38px;
+      border-radius:50%;
+      border: 3px solid rgba(0,188,235,.35);
+      margin-left: 2px;
+      flex:0 0 auto;
+    }
+    .orbit::before, .orbit::after{
+      content:"";
+      position:absolute;
+      width:8px; height:8px;
+      border-radius:50%;
+      background: var(--dn-navy);
+      top:-5px; left:50%;
+      transform: translateX(-50%);
+    }
+    .orbit::after{
+      width:7px; height:7px;
+      background: var(--dn-cyan);
+      top:auto; bottom:-4px;
+    }
+    .orbit .sat{
+      position:absolute;
+      width:7px; height:7px;
+      border-radius:50%;
+      background: var(--dn-cyan);
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
+      animation: spin 4s linear infinite;
+      transform-origin: 0 -16px;
+    }
+    @keyframes spin{
+      to{ transform: translate(-50%,-50%) rotate(360deg); }
+    }
   </style>
 </head>
+
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header>
-    <div class="container nav">
+    <div class="wrap topbar" role="banner" aria-label="Cisco Diabetes Network header">
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <h1>Cascadia Health Network</h1>
+        <img src="./DiabetesNetwork_Logo_MarkOnly.png" alt="Cisco Diabetes Network logo mark" />
+        <div class="brand-title">
+          <strong>Cisco Diabetes Network</strong>
+          <span>Inclusive Community</span>
+        </div>
       </div>
-      <nav class="links">
-        <a href="#about">About</a>
-        <a href="#network">Network</a>
-        <a href="#systems">Systems</a>
-        <a href="#vision">Vision</a>
-        <a href="#focus">What We’re Solving</a>
-        <a href="#leadership">Leadership</a>
-        <a href="#facts">Fast Facts</a>
-        <a href="#news">News</a>
-      </nav>
+
+      <div class="pill" aria-label="Not medical advice">
+        <span class="dot" aria-hidden="true"></span>
+        <span><b>Friendly reminder:</b> not medical advice</span>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <!-- HERO -->
-    <section class="hero card">
-      <p class="badge">Pretend Customer Site · Bootcamp Scenario</p>
-      <h2 class="title">Better Care. Connected. Everywhere.</h2>
-      <p class="subtitle">A regional healthcare network modernizing communications across <strong>2 hospitals</strong> and <strong>60 clinics</strong> — with a focus on resiliency, patient access, and staff experience.</p>
-      <div class="chips">
-        <span class="chip">5,600+ employees</span>
-        <span class="chip">450 contact center agents</span>
-        <span class="chip">Nortel PBX (Hospitals)</span>
-        <span class="chip">CUCM + UCCX (Clinics)</span>
-        <span class="chip">Maturing to CUCM + Webex Calling + WxCC</span>
-      </div>
-      <a class="cta" href="#about">Explore the Organization →</a>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="card">
-      <h2>About Us</h2>
-      <p>Cascadia Health Network serves communities across Oregon and Washington through two acute-care hospitals and sixty outpatient clinics. Our mission is to deliver seamless, patient-centered care — whether in the hospital, at a neighborhood clinic, or through virtual services. As patient expectations evolve, we are modernizing the way our teams communicate so care teams can coordinate faster, and patients can reach us more easily.</p>
-    </section>
-
-    <!-- NETWORK + SYSTEMS -->
-    <div class="grid grid-2">
-      <section id="network" class="card">
-        <h2>Our Network</h2>
-        <ul>
-          <li><strong>Hospitals:</strong> Cascadia Regional Medical Center (Portland, OR) &amp; ValleyCare Hospital (Salem, OR)</li>
-          <li><strong>Clinics:</strong> 60 locations (Primary Care, Pediatrics, Urgent Care, Specialty)</li>
-          <li><strong>Staffing:</strong> 5,600+ employees · 450 contact center agents</li>
-          <li><strong>Patient Interactions:</strong> 1M+ annually</li>
-        </ul>
-      </section>
-
-      <section id="systems" class="card">
-        <h2>Current Communication Systems</h2>
-        <ul>
-          <li><strong>Hospitals:</strong> Legacy Nortel PBXs (voice only)</li>
-          <li><strong>Clinics:</strong> Multiple CUCM + UCCX clusters (separately managed)</li>
-          <li><strong>Channels:</strong> Voice &amp; email only — no AI, chat, or self-service</li>
-          <li><strong>Challenge:</strong> Disconnected systems slow transfers and coordination between sites</li>
-        </ul>
-        <div class="callout">During surge events or outages, manual workarounds create delays for both staff and patients.</div>
-      </section>
-    </div>
-
-    <!-- VISION -->
-    <section id="vision" class="card">
-      <h2>Modernization Vision</h2>
-      <ul>
-        <li><strong>Hospitals:</strong> Migrate to <strong>CUCM</strong> on-prem integrated with <strong>Webex Calling</strong> + <strong>Webex Contact Center</strong> (hybrid continuity)</li>
-        <li><strong>Clinics:</strong> Transition fully to <strong>Webex Cloud</strong> (Calling + Contact Center)</li>
-        <li><strong>Goal:</strong> A resilient, unified platform that stays online during events — from <em>earthquakes</em> to <em>pandemic surges</em></li>
-      </ul>
-    </section>
-
-    <!-- WHAT WE'RE SOLVING -->
-    <section id="focus" class="card">
-      <h2>What We’re Solving For</h2>
-      <div class="grid grid-2">
-        <div>
-          <ul>
-            <li>Streamlined appointment scheduling and reminders</li>
-            <li>Faster nurse triage handoffs with shared context</li>
-            <li>Reduced repeat calls for prescription renewals</li>
-          </ul>
+  <main id="main" class="wrap" role="main">
+    <section class="hero" aria-label="Pump and CGM matchmaker">
+      <div class="card hero-left">
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:8px;">
+          <div class="orbit" aria-hidden="true"><span class="sat"></span></div>
+          <div>
+            <h1>Pump + CGM Matchmaker</h1>
+            <p class="subtitle">
+              A playful way to explore how different Continuous Glucose Monitors (CGMs) and insulin pumps
+              can pair up - and why some combos feel like a “power couple.” This page is built for curiosity, not clinical decisions.
+            </p>
+          </div>
         </div>
-        <div>
-          <ul>
-            <li>Continuity during outages and disaster events</li>
-            <li>Unified reporting across clinics and hospitals</li>
-            <li>Less manual work; more time for patient care</li>
-          </ul>
+
+        <div class="cta-row" aria-label="Primary actions">
+          <button class="btn-primary" id="btnScroll" type="button" aria-label="Jump to the matchmaker tool">
+            Jump into the matchmaker
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <button class="btn-secondary" id="btnSurprise" type="button" aria-label="Pick a surprise combo">
+            Surprise me 🎲
+          </button>
+
+          <button class="btn-ghost" id="btnReset" type="button" aria-label="Reset selections">
+            Reset
+          </button>
+        </div>
+
+        <div class="disclaimer" role="note" aria-label="Important disclaimer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 9v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 17h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M10.3 4.3 2.6 18.1a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <div>
+            <p><b>Not medical advice.</b> This experience is for education and fun. It does not diagnose, treat, or recommend devices.</p>
+            <small>
+              Always talk with a licensed clinician (and follow manufacturer instructions) for decisions about CGMs, insulin pumps, dosing, safety, or therapy changes.
+              If you are experiencing a medical emergency, contact local emergency services.
+            </small>
+          </div>
         </div>
       </div>
-      <p class="muted">Note: Public website material — operational details may change as modernization progresses.</p>
+
+      <aside class="card hero-right" aria-label="Brand image">
+        <div class="poster">
+          <img src="./DiabetesNet22.jpg" alt="Cisco Diabetes Network logo with Inclusive Community text" />
+        </div>
+
+        <div class="card" style="box-shadow:none; border-radius: var(--dn-radius); border:1px solid var(--dn-border); padding:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <span style="width:12px;height:12px;border-radius:50%;background:var(--dn-cyan);margin-top:5px;flex:0 0 auto;"></span>
+            <div>
+              <div style="font-weight:900;color:var(--dn-navy);">AI Agent powered exploration</div>
+              <div style="color:var(--muted); font-size:14px; margin-top:4px;">
+                Hook this page up to your AI Agent (Webex, embedded iframe, or a link) when you are ready.
+                For now, this page includes a lightweight “matchmaker” and a placeholder launch button.
+              </div>
+              <div class="cta-row" style="margin-top:10px;">
+                <a class="btn btn-primary" href="#" aria-disabled="true" tabindex="-1" style="pointer-events:none; opacity:.6;">
+                  Launch the Agent (coming soon)
+                </a>
+                <a class="btn btn-secondary" href="#links">Links</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
     </section>
 
-    <!-- LEADERSHIP -->
-    <section id="leadership" class="card">
-      <h2>Leadership Team</h2>
-      <ul>
-        <li><strong>Dr. Evelyn Harper — CIO:</strong> Leading hybrid strategy and platform consolidation</li>
-        <li><strong>Jordan Lee — VP, Clinical Operations:</strong> Ensuring resiliency and patient continuity</li>
-        <li><strong>Melissa Grant — Contact Center Director:</strong> Performance &amp; staffing across multiple clusters</li>
-        <li><strong>Ravi Patel — Scheduling Manager:</strong> Patient access, appointments &amp; outreach</li>
-      </ul>
+    <section class="section-title" aria-label="Tool section heading">
+      <h2 id="tool">Pick your combo</h2>
+      <p class="hint">Choose a CGM, choose a pump, and we will show a friendly comparison.</p>
     </section>
 
-    <!-- FAST FACTS -->
-    <section id="facts" class="card">
-      <h2>Fast Facts</h2>
-      <table class="table" role="table" aria-label="Organization facts">
-        <thead>
-          <tr><th>Metric</th><th>Value</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Total Employees</td><td>5,600</td></tr>
-          <tr><td>Contact Center Agents</td><td>450</td></tr>
-          <tr><td>Hospitals</td><td>2</td></tr>
-          <tr><td>Clinics</td><td>60</td></tr>
-          <tr><td>Annual Patient Interactions</td><td>1,000,000+</td></tr>
-          <tr><td>Current Systems</td><td>Nortel PBX, CUCM, UCCX</td></tr>
-          <tr><td>Channels</td><td>Voice, Email</td></tr>
-          <tr><td>Modernization Goal</td><td>CUCM + Webex Calling + Webex Contact Center (hybrid/cloud)</td></tr>
-        </tbody>
-      </table>
-    </section>
+    <section class="grid" aria-label="Matchmaker tool">
+      <div class="card picker" aria-label="Selection controls">
+        <div class="field">
+          <label for="cgm">Continuous Glucose Monitor (CGM)</label>
+          <select id="cgm" aria-describedby="cgmHelp">
+            <option value="">Select a CGM</option>
+          </select>
+          <div id="cgmHelp" style="color:var(--muted); font-size:13px;">
+            Tip: Pick the one you are curious about - not necessarily what you use today.
+          </div>
+        </div>
 
-    <!-- NEWS -->
-    <section id="news" class="card">
-      <h2>News & Announcements</h2>
-      <ul>
-        <li><strong>Q4 Initiative:</strong> Piloting appointment reminders and self-service scheduling at 5 clinics.</li>
-        <li><strong>Emergency Readiness:</strong> Quarterly disaster recovery drill to validate communication failover.</li>
-        <li><strong>Care Experience:</strong> Launching patient feedback loop to improve access and coordination.</li>
-      </ul>
-      <p class="muted">This site is for training purposes and represents a fictional organization.</p>
-    </section>
+        <div class="field">
+          <label for="pump">Insulin Pump</label>
+          <select id="pump" aria-describedby="pumpHelp">
+            <option value="">Select a pump</option>
+          </select>
+          <div id="pumpHelp" style="color:var(--muted); font-size:13px;">
+            Pumps come in all shapes - tubed, tubeless, hybrid systems, and more.
+          </div>
+        </div>
 
-    <section class="footer">
-      <p><span class="kbd">Bootcamp</span> Healthcare Network — Hybrid Migration · Cascadia Health Network (Fictional)</p>
-      <p>© Cascadia Health Network — Training Scenario · All names are placeholders.</p>
+        <div class="chips" id="chips" aria-label="Quick facts chips"></div>
+      </div>
+
+      <div class="card result" aria-label="Match results">
+        <h3>Your match snapshot</h3>
+        <p id="summary">Pick a CGM and a pump to see the matchmaker kick in.</p>
+
+        <div class="score" aria-label="Compatibility score">
+          <span class="badge neutral" id="badge">Compatibility: -</span>
+          <div class="meter" aria-hidden="true"><span id="meterFill" style="width:50%"></span></div>
+          <span style="color:var(--muted); font-weight:700;" id="scoreText">Score: -</span>
+        </div>
+
+        <ul class="list" id="bullets" aria-label="Highlights"></ul>
+      </div>
+
+      <div class="card compare" aria-label="Comparison table">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <h3 style="margin:0; color:var(--dn-navy); font-size:18px;">What this combo is “good for” (in plain English)</h3>
+          <span class="badge good" id="tone">Friendly notes</span>
+        </div>
+
+        <div style="margin-top:12px; overflow:auto;">
+          <table aria-label="Comparison categories">
+            <thead>
+              <tr>
+                <th style="min-width:170px;">Category</th>
+                <th>CGM vibe</th>
+                <th>Pump vibe</th>
+                <th>Combo vibe</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr>
+                <td><b>Comfort & wear</b></td>
+                <td>-</td><td>-</td><td>-</td>
+              </tr>
+              <tr>
+                <td><b>Alerts & insights</b></td>
+                <td>-</td><td>-</td><td>-</td>
+              </tr>
+              <tr>
+                <td><b>App experience</b></td>
+                <td>-</td><td>-</td><td>-</td>
+              </tr>
+              <tr>
+                <td><b>Automation</b></td>
+                <td>-</td><td>-</td><td>-</td>
+              </tr>
+              <tr>
+                <td><b>Best for</b></td>
+                <td>-</td><td>-</td><td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin:12px 0 0; color:var(--muted); font-size:13px;">
+          These are general, non-clinical comparisons to support a conversation with your care team.
+          Always verify device compatibility and approved integrations with official sources.
+        </p>
+      </div>
     </section>
   </main>
-<!-- Chat Widget (self-hosted loader) -->
-<div id="divicw" data-bind="ECBA212A-FE2A-412A-AAAE-6AE864A008B8" data-org=""></div>
-<script src="chatloader.js"></script>
+
+  <footer id="links">
+    <div class="footer-grid">
+      <div class="legal">
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--dn-navy);margin-top:7px;flex:0 0 auto;"></span>
+          <div>
+            <div style="font-weight:900; color:var(--dn-navy);">Legal and safety notes (aka the important grown-up stuff)</div>
+            <ul style="margin:8px 0 0; padding-left:18px;">
+              <li>This site is for education and fun only. It is not medical advice, diagnosis, or treatment.</li>
+              <li>No warranty is provided. Information may be incomplete, outdated, or simplified.</li>
+              <li>Always consult a licensed healthcare professional for medical decisions and safety guidance.</li>
+              <li>Device names and brands are trademarks of their respective owners. No affiliation is implied.</li>
+            </ul>
+            <div style="margin-top:10px;">
+              <span style="font-weight:800;">Accessibility:</span>
+              This page is designed with readable contrast, keyboard navigation, and clear labeling.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="links" aria-label="Links section">
+        <div style="font-weight:900; color:var(--dn-navy);">Links (placeholder)</div>
+        <div class="placeholder">
+          Add your resources here later - examples:
+          official device compatibility pages, insurance info, clinician discussion checklists, your AI Agent link, community resources, and fun how-to videos.
+        </div>
+        <a class="btn btn-secondary" href="#main">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Lightweight "matchmaker" - intentionally non-clinical and general.
+    const CGMS = [
+      {
+        id: "dexcom",
+        name: "Dexcom (family)",
+        chips: ["Strong alerts culture", "Popular app ecosystem", "Share features"],
+        vibe: {
+          comfort: "Designed for continuous wear with a lot of user familiarity.",
+          alerts: "Known for clear alerting and sharing features (varies by model/region).",
+          app: "Often praised for app polish and integrations.",
+          automation: "Works with select automated insulin delivery ecosystems depending on model.",
+          bestFor: "People who value alerts, sharing, and a broad ecosystem."
+        }
+      },
+      {
+        id: "libre",
+        name: "FreeStyle Libre (family)",
+        chips: ["Discreet vibe", "Scan-first heritage", "Often budget-friendly"],
+        vibe: {
+          comfort: "Discreet sensor profile that many find easy to wear.",
+          alerts: "Some models support optional alerts; behavior varies by model.",
+          app: "Simple, straightforward app experience for many users.",
+          automation: "Compatibility depends on model and region - always verify.",
+          bestFor: "People who want simplicity and a lower-friction daily routine."
+        }
+      },
+      {
+        id: "guardian",
+        name: "Guardian (family)",
+        chips: ["Integrated ecosystem", "Automation-focused", "Training matters"],
+        vibe: {
+          comfort: "Built for continuous wear; setup experience varies by model.",
+          alerts: "Built to support safety alerts within an ecosystem.",
+          app: "Often optimized when used within the same vendor ecosystem.",
+          automation: "Commonly associated with automated insulin delivery systems in-vendor.",
+          bestFor: "People who prefer an integrated single-ecosystem approach."
+        }
+      },
+      {
+        id: "eversense",
+        name: "Eversense (implantable CGM concept)",
+        chips: ["Long wear concept", "Different insertion workflow", "Unique approach"],
+        vibe: {
+          comfort: "Different wear experience due to longer-wear concept.",
+          alerts: "May include on-body alerts; model-dependent.",
+          app: "Unique workflows compared to typical sensors.",
+          automation: "Compatibility is specific - confirm carefully.",
+          bestFor: "People interested in longer-wear concepts and different routines."
+        }
+      }
+    ];
+
+    const PUMPS = [
+      {
+        id: "omnipod",
+        name: "Omnipod (tubeless pod concept)",
+        chips: ["Tubeless freedom", "Wear-and-swap pods", "Lifestyle friendly"],
+        vibe: {
+          comfort: "No tubing - many people love the freedom of movement.",
+          alerts: "Pod + controller alerts and reminders for changes.",
+          app: "Controller/app experience varies by generation.",
+          automation: "Pairs with select CGMs for automation in some systems.",
+          bestFor: "People who want a tubeless setup and simple swaps."
+        }
+      },
+      {
+        id: "tandem",
+        name: "Tandem (t:slim / family concept)",
+        chips: ["Sleek hardware", "Automation reputation", "Strong UX focus"],
+        vibe: {
+          comfort: "Tubed pump with a modern, compact form factor.",
+          alerts: "Clear alerts with customizable thresholds (system-dependent).",
+          app: "Often praised for modern UX and data views.",
+          automation: "Known for automation in some configurations with compatible CGMs.",
+          bestFor: "People who want modern UX and automation options."
+        }
+      },
+      {
+        id: "medtronic",
+        name: "Medtronic (integrated ecosystem concept)",
+        chips: ["Single ecosystem", "Automation oriented", "Training supported"],
+        vibe: {
+          comfort: "Tubed pump options with a long history in pump therapy.",
+          alerts: "Designed around safety alerts and guided workflows.",
+          app: "Often strongest within the full ecosystem of devices.",
+          automation: "Commonly supports in-ecosystem automation options.",
+          bestFor: "People who want a unified brand ecosystem experience."
+        }
+      },
+      {
+        id: "mobi",
+        name: "Tandem Mobi (small/tethered concept)",
+        chips: ["Small form factor", "Phone-forward", "Flexible wear"],
+        vibe: {
+          comfort: "Very small pump concept with flexible wear approaches.",
+          alerts: "System alerts geared for everyday use.",
+          app: "Phone-forward control experience (availability varies).",
+          automation: "Automation depends on compatible CGM/system configuration.",
+          bestFor: "People who want a tiny pump and phone-forward feel."
+        }
+      }
+    ];
+
+    // Simple "compatibility" - NOT a real compatibility checker.
+    // It's a playful score based on ecosystem similarity and “vibe” alignment.
+    const COMPAT = {
+      // pumpId: { cgmId: score }
+      tandem:   { dexcom: 92, libre: 68, guardian: 55, eversense: 60 },
+      mobi:     { dexcom: 90, libre: 66, guardian: 54, eversense: 58 },
+      omnipod:  { dexcom: 84, libre: 62, guardian: 50, eversense: 56 },
+      medtronic:{ guardian: 90, dexcom: 58, libre: 55, eversense: 52 }
+    };
+
+    const comboHighlights = (cgm, pump, score) => {
+      const bullets = [];
+      if (!cgm || !pump) return bullets;
+
+      if (score >= 85) bullets.push("This combo feels like it was built to work together (still verify official compatibility).");
+      if (score >= 70 && score < 85) bullets.push("Solid pairing vibes - a common path for many people.");
+      if (score < 70) bullets.push("Not a bad combo - just a “double-check the details” kind of situation.");
+
+      bullets.push("Consider: comfort, alerts, app experience, and how much automation you want.");
+      bullets.push("Bring your top 3 priorities to your clinician (and ask about real compatibility + coverage).");
+      return bullets;
+    };
+
+    const $ = (sel) => document.querySelector(sel);
+
+    const cgmSelect = $("#cgm");
+    const pumpSelect = $("#pump");
+    const chips = $("#chips");
+    const summary = $("#summary");
+    const badge = $("#badge");
+    const meterFill = $("#meterFill");
+    const scoreText = $("#scoreText");
+    const bulletsEl = $("#bullets");
+    const tbody = $("#tbody");
+
+    function fillSelect(select, items){
+      for (const item of items){
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = item.name;
+        select.appendChild(opt);
+      }
+    }
+
+    function getScore(pumpId, cgmId){
+      const base = (COMPAT[pumpId] && COMPAT[pumpId][cgmId]) ? COMPAT[pumpId][cgmId] : 55;
+      // add tiny, deterministic “spice” so it feels alive but stable
+      const spice = ((pumpId + cgmId).length % 7) - 3; // -3..+3
+      const score = Math.max(40, Math.min(95, base + spice));
+      return score;
+    }
+
+    function scoreLabel(score){
+      if (score >= 85) return { text: "Compatibility: High", cls: "good" };
+      if (score >= 70) return { text: "Compatibility: Medium", cls: "neutral" };
+      return { text: "Compatibility: Check details", cls: "warn" };
+    }
+
+    function render(){
+      const cgmId = cgmSelect.value;
+      const pumpId = pumpSelect.value;
+
+      const cgm = CGMS.find(x => x.id === cgmId);
+      const pump = PUMPS.find(x => x.id === pumpId);
+
+      chips.innerHTML = "";
+      const addChip = (t, colorDot=true) => {
+        const el = document.createElement("span");
+        el.className = "chip";
+        el.innerHTML = (colorDot ? '<span class="mini" aria-hidden="true"></span>' : '') + t;
+        chips.appendChild(el);
+      };
+
+      if (cgm) cgm.chips.forEach(c => addChip(c));
+      if (pump) pump.chips.forEach(p => addChip(p, false));
+
+      // If incomplete
+      if (!cgm || !pump){
+        summary.textContent = "Pick a CGM and a pump to see the matchmaker kick in.";
+        badge.className = "badge neutral";
+        badge.textContent = "Compatibility: -";
+        meterFill.style.width = "50%";
+        scoreText.textContent = "Score: -";
+        bulletsEl.innerHTML = "";
+        // Reset table rows
+        tbody.innerHTML = `
+          <tr><td><b>Comfort & wear</b></td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Alerts & insights</b></td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>App experience</b></td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Automation</b></td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Best for</b></td><td>-</td><td>-</td><td>-</td></tr>
+        `;
+        return;
+      }
+
+      const score = getScore(pumpId, cgmId);
+      const label = scoreLabel(score);
+
+      summary.textContent = `You picked ${cgm.name} + ${pump.name}. Here are the (non-medical) vibes.`;
+      badge.className = "badge " + label.cls;
+      badge.textContent = label.text;
+      meterFill.style.width = score + "%";
+      scoreText.textContent = "Score: " + score + "/100";
+
+      bulletsEl.innerHTML = "";
+      for (const b of comboHighlights(cgm, pump, score)){
+        const li = document.createElement("li");
+        li.textContent = b;
+        bulletsEl.appendChild(li);
+      }
+
+      // Table
+      const comboVibe = (cat) => {
+        if (cat === "comfort") return score >= 80 ? "Comfort-first pairing with smooth day-to-day feel." : "Comfort depends on preferences - try to “test drive” workflows.";
+        if (cat === "alerts") return score >= 80 ? "Alerts + insights feel cohesive, especially for routines and sharing." : "Alerts may feel different across systems - confirm how they behave.";
+        if (cat === "app") return score >= 80 ? "App experience tends to be a strong part of this combo." : "App experience can be great, but may take setup time.";
+        if (cat === "automation") return score >= 80 ? "Higher chance of supported automation pathways (verify officially)." : "Automation may be limited or require specific models/regions.";
+        if (cat === "bestFor") return score >= 80 ? "People who want a cohesive ecosystem and clear day-to-day flow." : "People who like mixing ecosystems and optimizing for personal priorities.";
+        return "-";
+      };
+
+      tbody.innerHTML = `
+        <tr>
+          <td><b>Comfort & wear</b></td>
+          <td>${cgm.vibe.comfort}</td>
+          <td>${pump.vibe.comfort}</td>
+          <td>${comboVibe("comfort")}</td>
+        </tr>
+        <tr>
+          <td><b>Alerts & insights</b></td>
+          <td>${cgm.vibe.alerts}</td>
+          <td>${pump.vibe.alerts}</td>
+          <td>${comboVibe("alerts")}</td>
+        </tr>
+        <tr>
+          <td><b>App experience</b></td>
+          <td>${cgm.vibe.app}</td>
+          <td>${pump.vibe.app}</td>
+          <td>${comboVibe("app")}</td>
+        </tr>
+        <tr>
+          <td><b>Automation</b></td>
+          <td>${cgm.vibe.automation}</td>
+          <td>${pump.vibe.automation}</td>
+          <td>${comboVibe("automation")}</td>
+        </tr>
+        <tr>
+          <td><b>Best for</b></td>
+          <td>${cgm.vibe.bestFor}</td>
+          <td>${pump.vibe.bestFor}</td>
+          <td>${comboVibe("bestFor")}</td>
+        </tr>
+      `;
+    }
+
+    // Actions
+    $("#btnScroll").addEventListener("click", () => {
+      document.getElementById("tool").scrollIntoView({ behavior: "smooth", block: "start" });
+      cgmSelect.focus({ preventScroll: true });
+    });
+
+    $("#btnReset").addEventListener("click", () => {
+      cgmSelect.value = "";
+      pumpSelect.value = "";
+      render();
+    });
+
+    $("#btnSurprise").addEventListener("click", () => {
+      const c = CGMS[Math.floor(Math.random()*CGMS.length)];
+      const p = PUMPS[Math.floor(Math.random()*PUMPS.length)];
+      cgmSelect.value = c.id;
+      pumpSelect.value = p.id;
+      render();
+      document.getElementById("tool").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    cgmSelect.addEventListener("change", render);
+    pumpSelect.addEventListener("change", render);
+
+    // Init
+    fillSelect(cgmSelect, CGMS);
+    fillSelect(pumpSelect, PUMPS);
+    render();
+  </script>
 </body>
 </html>
